@@ -1,0 +1,144 @@
+﻿@model DealDouble.Web.ViewModels.CreateAuctionsViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title">Create Auction</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form id="createForm" method="post" action="/Auctions/Create/">
+    <div class="modal-body">
+        <div class="form-group">
+            <label>
+                Title
+            </label>
+            <input class="form-control" name="Title" />
+        </div>
+        <div class="form-group">
+            <label>
+                Category
+            </label>
+            <select class="form-control" name="categoryID">
+               @foreach(var cateory in Model.categories)
+               {
+                   <option value="@cateory.ID">@cateory.Name</option>
+
+               }
+
+            </select>
+</div>
+        <div class="form-group">
+            <label>
+                Description
+            </label>
+            <input class="form-control" name="Description" />
+        </div>
+        <div class="form-group">
+            <label>
+                ActualAmount
+            </label>
+            <input class="form-control" name="ActualAmount" />
+
+        </div>
+
+        <div class="form-group">
+            <label>
+                StartingTime
+            </label>
+            <input class="form-control" name="StartingTime" />
+
+        </div>
+
+        <div class="form-group">
+            <label>
+                EndTime
+            </label>
+            <input class="form-control" name="EndTime" />
+        </div>
+
+        <div class="form-group">
+            <label>
+                Select Pictures
+            </label>
+            <input id="auctionPictures" class="form-control" name="AuctionPicture" type="file" multiple />
+        </div>
+        <div id="picturesArea">
+            <input type="hidden" name="AuctionPictures" id="pictureIDs" />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       <button class="btn btn-success" type="button" id="saveButton"> save </button>
+   </div>
+</form>
+
+<script>
+    $("#saveButton").click(function () {
+   
+        var imageIDs = [];
+        $("#picturesArea .image").each(function () {
+            var imageID = $(this).attr("data-id");
+            imageIDs.push(imageID);
+
+        });
+        $("#pictureIDs").val(imageIDs.join());
+
+        $.ajax({
+            url:"@Url.Action("Create", "Auctions")",
+            method: "post",
+          
+            data: $("#createForm").serialize()
+        }).done(function (response) {
+            //$('#formModel').m odel('toggle');
+           $("#listingArea").html(response);
+       });
+    });
+
+
+    $("#auctionPictures").change(function () {
+
+        var pictures = this.files;
+        var picsData = new FormData();
+        var picsData = new FormData();
+
+        for (var i = 0; i < pictures.length; i++) {
+            picsData.append("Picture", pictures[i])
+        }
+       
+        $.ajax({
+            url:"@Url.Action("UploadPictures", "Shared")",
+            type: "post", 
+            data: picsData,
+            dataType: "json",
+            processData: false,
+            contentType: false
+
+        }).done(function (responses) {
+        
+
+            var picIDs = '';
+            //$('#formModel').model('toggle');
+            for (var i = 0; i < responses.length; i++) {
+                var picResponse = responses[i];
+                AttachNewImage(picResponse.pictureUrl, picResponse.ID);
+
+              
+               }
+
+          
+       });
+    });
+
+    function AttachNewImage(imageURL, imageId) {
+    
+        var $newImagehtml = $("#imageTemplate").clone();
+        $newImagehtml.find(".image").attr("src", "/Content/images/" + imageURL);
+        $newImagehtml.find(".image").attr("data-id", imageId);
+        $("#picturesArea").append($newImagehtml.html());
+        RemoveImageOnClick();
+
+    }
+
+
+</script>

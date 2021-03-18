@@ -1,0 +1,6 @@
+D:\Projects\DealDouble\DealDouble.Entities\bin\Debug\DealDouble.Entities.dll
+D:\Projects\DealDouble\DealDouble.Entities\bin\Debug\DealDouble.Entities.pdb
+D:\Projects\DealDouble\DealDouble.Entities\obj\Debug\DealDouble.Entities.csprojAssemblyReference.cache
+D:\Projects\DealDouble\DealDouble.Entities\obj\Debug\DealDouble.Entities.csproj.CoreCompileInputs.cache
+D:\Projects\DealDouble\DealDouble.Entities\obj\Debug\DealDouble.Entities.dll
+D:\Projects\DealDouble\DealDouble.Entities\obj\Debug\DealDouble.Entities.pdb
